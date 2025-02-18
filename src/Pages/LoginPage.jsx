@@ -4,6 +4,16 @@ import FadeIn from "../Components/Fadein";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+function setCookie(name, value, days) {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
 function LoginPage() {
   const [loggingIn, setLoggingIn] = useState(false);
   const dispatch = useDispatch();
@@ -49,16 +59,18 @@ function LoginPage() {
         }
       );
       const data = await response.json();
-      if (data.success) {
-        toast.success(data.message, {
+      console.log(data);
+
+      if (data.user.success) {
+        setCookie("jwt", data.token, 1);
+        toast.success(data.user.message, {
           duration: 4000,
           position: "top-center",
         });
-        console.log(data);
 
         setLoggingIn(false);
       } else {
-        toast.error(data.message, {
+        toast.error(data.user.message, {
           duration: 4000,
           position: "top-center",
         });
