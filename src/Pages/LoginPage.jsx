@@ -53,6 +53,10 @@ function LoginPage() {
         dispatch(
           tostAction.addToast({ success: true, message: data.user.message })
         );
+      } else {
+        dispatch(
+          tostAction.addToast({ success: false, message: data.user.message })
+        );
       }
       setLoggingIn(false);
       navigate("/");
