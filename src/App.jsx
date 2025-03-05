@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
 import { authAction } from "./reduxStatemanagement/authReducer";
-import CircularIndeterminate from "./Loadinggif";
+import CircularIndeterminate from "./Components/Loadinggif";
 
 function App() {
   const { user } = useSelector((state) => state.authReducer);
