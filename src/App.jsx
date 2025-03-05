@@ -4,7 +4,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
-import Homepage from "./Pages/Homepage";
+import Homepage from "./Pages/HomePage";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
