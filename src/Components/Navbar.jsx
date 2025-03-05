@@ -1,33 +1,21 @@
 import React from "react";
 import { Bolt, SendHorizontal } from "lucide-react";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axiosInstance from "../lib/axios";
+import { axiosInstance } from "../lib/axios";
 import { useSelector } from "react-redux";
 function Navbar() {
   async function LogoutUser() {
     try {
+      console.log("Logging out");
+
       const responce = await axiosInstance.get("/auth/logout");
+      console.log("Logout responce", responce);
     } catch (error) {
       console.log("Error in logout", error);
     }
   }
 
   const { user } = useSelector((state) => state.authReducer);
-  const [isRotating, setIsRotating] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const handleBoltClick = () => {
-    setIsRotating(!isRotating);
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  let dropdownItems = [];
-
-  if (user) {
-    dropdownItems = ["Settings", "switch mode", "Logout"];
-  } else {
-    dropdownItems = ["switch mode"];
-  }
 
   return (
     <div
@@ -45,39 +33,13 @@ function Navbar() {
           />
         </span>
       </div>
-
-      <div className="relative">
-        <button
-          className="btn btn-ghost rounded-btn m-1"
-          onClick={handleBoltClick}
-        >
-          <Bolt
-            className={`dark:text-white text-slate-800 ${
-              isRotating ? "rotate-to-45" : "rotate-to-0"
-            }`}
-            strokeWidth={2.5}
-          />
-        </button>
-        <ul
-          className={`absolute right-0 mt-2 w-52 bg-slate-800 rounded-box shadow-lg transition-all duration-300 ease-in-out transform ${
-            isDropdownOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
-          style={{ pointerEvents: isDropdownOpen ? "auto" : "none" }}
-        >
-          {dropdownItems.map((item, i) => {
-            return (
-              <li key={i} className="p-2 hover:bg-slate-700">
-                {item === "Logout" ? (
-                  <Link to="#" onClick={LogoutUser}>
-                    {item}
-                  </Link>
-                ) : (
-                  <Link to="#">{item}</Link>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+      <div className="flex items-center gap-8">
+        <div>Settings</div>
+        {user && (
+          <div onClick={LogoutUser} className="cursor-pointer">
+            Logout
+          </div>
+        )}
       </div>
     </div>
   );
