@@ -4,7 +4,14 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 function Navbar() {
-  const navigate = useNavigate();
+  async function LogoutUser() {
+    try {
+      const responce = await axiosInstance.get("/auth/logout");
+    } catch (error) {
+      console.log("Error in logout", error);
+    }
+  }
+
   const { user } = useSelector((state) => state.authReducer);
   const [isRotating, setIsRotating] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -59,7 +66,13 @@ function Navbar() {
           {dropdownItems.map((item, i) => {
             return (
               <li key={i} className="p-2 hover:bg-slate-700">
-                <Link to="#">{item}</Link>
+                {item === "Logout" ? (
+                  <Link to="#" onClick={LogoutUser}>
+                    {item}
+                  </Link>
+                ) : (
+                  <Link to="#">{item}</Link>
+                )}
               </li>
             );
           })}
