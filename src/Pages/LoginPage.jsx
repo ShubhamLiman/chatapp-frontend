@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { axiosInstance } from "../lib/axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authAction } from "../reduxStatemanagement/authReducer";
 import { tostAction } from "../reduxStatemanagement/tostReducer";
 import { useNavigate } from "react-router-dom";
