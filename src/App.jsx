@@ -5,7 +5,7 @@ import Navbar from "./Components/Navbar";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
 import Homepage from "./Pages/Homepage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
 import { authAction } from "./reduxStatemanagement/authReducer";
