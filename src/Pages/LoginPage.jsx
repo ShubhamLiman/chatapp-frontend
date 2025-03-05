@@ -62,6 +62,9 @@ function LoginPage() {
       navigate("/");
     } catch (error) {
       setLoggingIn(false);
+      dispatch(
+        tostAction.addToast({ success: false, message: data.user.message })
+      );
       console.error("Login failed:", error);
     }
   };
