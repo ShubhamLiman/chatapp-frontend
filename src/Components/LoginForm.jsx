@@ -13,13 +13,23 @@ export default function LoginForm({ handleSubmit, loggingIn }) {
         </h2>
 
         <form className="my-8" onSubmit={handleSubmit}>
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-6">
             <Label htmlFor="email">Email Address</Label>
-            <Input id="email" placeholder="example@email.com" type="email" />
+            <Input
+              id="email"
+              placeholder="example@email.com"
+              type="email"
+              autoComplete="email"
+            />
           </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-10">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
+            <Input
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              autoComplete="current-password"
+            />
           </LabelInputContainer>
 
           <button

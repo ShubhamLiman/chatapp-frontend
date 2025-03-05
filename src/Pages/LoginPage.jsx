@@ -1,25 +1,17 @@
-import React from "react";
-import LoginForm from "../Components/LoginForm";
-import FadeIn from "../Components/Fadein";
-import toast, { Toaster } from "react-hot-toast";
-import { useState } from "react";
+import React, { useState } from "react";
+import { axiosInstance } from "../lib/axios";
 import { useDispatch, useSelector } from "react-redux";
+import { authAction } from "../reduxStatemanagement/authReducer";
+import { tostAction } from "../reduxStatemanagement/tostReducer";
+import { useNavigate } from "react-router-dom";
 
-function setCookie(name, value, days) {
-  let expires = "";
-  if (days) {
-    const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = "; expires=" + date.toUTCString();
-  }
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
+import FadeIn from "../Components/Fadein";
+import AnimatedGraphic from "../Components/AnimatedGraphic";
+import LoginForm from "../Components/LoginForm";
 function LoginPage() {
   const [loggingIn, setLoggingIn] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.authReducer);
-  // console.log(user);
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoggingIn(true);
@@ -27,72 +19,81 @@ function LoginPage() {
     const password = e.target.password.value;
 
     if (!email || !password) {
-      toast.error("Email and Password are required", {
-        duration: 4000,
-        position: "top-center",
-      });
-      setLoggingIn(false);
-      return;
-    }
-    if (password.length < 6) {
-      toast.error("invalid", {
-        duration: 4000,
-        position: "top-center",
-      });
-      setLoggingIn(false);
-      return;
-    }
-    try {
-      const response = await fetch(
-        "https://chatapp-backend-pi-fawn.vercel.app/api/auth/login",
-        // "http://localhost:3000/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-          credentials: "include",
-        }
+      dispatch(
+        tostAction.addToast({
+          success: false,
+          message: "All fields are required",
+        })
       );
-      const data = await response.json();
-      console.log(data);
+      setLoggingIn(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      dispatch(
+        tostAction.addToast({
+          success: false,
+          message: "Password must be at least 6 characters",
+        })
+      );
+      setLoggingIn(false);
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post("/auth/login", {
+        email,
+        password,
+      });
+      const data = response.data;
 
       if (data.user.success) {
-        setCookie("jwt", data.token, 1);
-        toast.success(data.user.message, {
-          duration: 4000,
-          position: "top-center",
-        });
-
-        setLoggingIn(false);
-      } else {
-        toast.error(data.user.message, {
-          duration: 4000,
-          position: "top-center",
-        });
-        setLoggingIn(false);
+        dispatch(authAction.setUser(data.user.user));
+        // setCookie("jwt", data.token, 1, true, "Lax");
+        dispatch(
+          tostAction.addToast({ success: true, message: data.user.message })
+        );
       }
-    } catch (error) {
-      toast.error("An error occurred", {
-        duration: 4000,
-        position: "top-center",
-      });
       setLoggingIn(false);
+      navigate("/");
+    } catch (error) {
+      setLoggingIn(false);
+      console.error("Login failed:", error);
     }
   };
+
   return (
-    <div className="h-screen relative w-full overflow-hidden bg-black flex flex-col items-center justify-center rounded-lg">
-      <div className="absolute inset-0 w-full h-full z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-      <Toaster containerClassName="mt-20" />
-      <FadeIn duration={100} className={"w-full"}>
-        <LoginForm handleSubmit={handleSubmit} loggingIn={loggingIn} />
-      </FadeIn>
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-1/2 ">
+        <FadeIn duration={300}>
+          <LoginForm handleSubmit={handleSubmit} loggingIn={loggingIn} />
+        </FadeIn>
+      </div>
+      <div className="w-1/2">
+        <AnimatedGraphic />
+      </div>
     </div>
   );
 }
 
 export default LoginPage;
+
+// function setCookie(name, value, days, secure = false, sameSite = "Lax") {
+//   let expires = "";
+//   if (days) {
+//     const date = new Date();
+//     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+//     expires = "; expires=" + date.toUTCString();
+//   }
+//   let cookieString = name + "=" + (value || "") + expires + "; path=/";
+
+//   // Add Secure attribute if needed
+//   if (secure) {
+//     cookieString += "; Secure";
+//   }
+
+//   // Add SameSite attribute
+//   cookieString += "; SameSite=" + sameSite;
+
+//   document.cookie = cookieString;
+// }
