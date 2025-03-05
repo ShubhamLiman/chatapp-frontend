@@ -2,6 +2,7 @@ import React from "react";
 import { Bolt, SendHorizontal } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axiosInstance from "../lib/axios";
 import { useSelector } from "react-redux";
 function Navbar() {
   async function LogoutUser() {
