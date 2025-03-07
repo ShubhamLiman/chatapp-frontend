@@ -46,10 +46,8 @@ function LoginPage() {
         password,
       });
       const data = response.data;
-
       if (data.user.success) {
         dispatch(authAction.setUser(data.user.user));
-        // setCookie("jwt", data.token, 1, true, "Lax");
         dispatch(
           tostAction.addToast({ success: true, message: data.user.message })
         );
@@ -57,16 +55,30 @@ function LoginPage() {
         dispatch(
           tostAction.addToast({ success: false, message: data.user.message })
         );
+        return;
       }
       setLoggingIn(false);
       navigate("/");
     } catch (error) {
       setLoggingIn(false);
       dispatch(
-        tostAction.addToast({ success: false, message: data.user.message })
+        tostAction.addToast({
+          success: false,
+          message: error.response.data.user.message,
+        })
       );
       console.error("Login failed:", error);
     }
+    // try {
+    //   const response = await axiosInstance.post("/auth/login", {
+    //     email,
+    //     password,
+    //   });
+    //   const data = response.data;
+    //   console.log(data);
+    // } catch (err) {
+    //   console.log(err.response.data.user.message);
+    // }
   };
 
   return (
@@ -84,23 +96,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
-// function setCookie(name, value, days, secure = false, sameSite = "Lax") {
-//   let expires = "";
-//   if (days) {
-//     const date = new Date();
-//     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-//     expires = "; expires=" + date.toUTCString();
-//   }
-//   let cookieString = name + "=" + (value || "") + expires + "; path=/";
-
-//   // Add Secure attribute if needed
-//   if (secure) {
-//     cookieString += "; Secure";
-//   }
-
-//   // Add SameSite attribute
-//   cookieString += "; SameSite=" + sameSite;
-
-//   document.cookie = cookieString;
-// }

@@ -18,16 +18,31 @@ export default function SignupForm({ handleSubmit, signingUp }) {
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
             <Label htmlFor="fullname">Full Name</Label>
-            <Input id="fullname" placeholder="John Doe" type="text" />
+            <Input
+              id="fullname"
+              placeholder="John Doe"
+              type="text"
+              autoComplete="fullname"
+            />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="example@email.com" type="email" />
+          <Input
+            id="email"
+            placeholder="example@email.com"
+            type="email"
+            autoComplete="email"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
+          <Input
+            id="password"
+            placeholder="••••••••"
+            type="password"
+            autoComplete="password"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-8">
           <Label htmlFor="confirmpassword">Confirm Password </Label>
@@ -35,6 +50,7 @@ export default function SignupForm({ handleSubmit, signingUp }) {
             id="confirmpassword"
             placeholder="••••••••"
             type="confirmpassword"
+            autoComplete="confirm-password"
           />
         </LabelInputContainer>
 

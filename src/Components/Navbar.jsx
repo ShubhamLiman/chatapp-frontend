@@ -1,15 +1,30 @@
 import React from "react";
-import { Bolt, SendHorizontal } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
 import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
-import { useSelector } from "react-redux";
-function Navbar() {
-  async function LogoutUser() {
-    try {
-      console.log("Logging out");
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { tostAction } from "../reduxStatemanagement/tostReducer";
+import { authAction } from "../reduxStatemanagement/authReducer";
 
+function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  async function LogoutUser(e) {
+    e.preventDefault();
+    try {
       const responce = await axiosInstance.get("/auth/logout");
-      console.log("Logout responce", responce);
+      const data = responce.data;
+      if (data.success) {
+        dispatch(authAction.setUser(null));
+        navigate("/login");
+        dispatch(tostAction.addToast({ success: true, message: data.message }));
+      } else {
+        dispatch(
+          tostAction.addToast({ success: false, message: data.message })
+        );
+        return;
+      }
     } catch (error) {
       console.log("Error in logout", error);
     }

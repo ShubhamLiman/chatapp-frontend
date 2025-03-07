@@ -23,7 +23,6 @@ function App() {
       setCheckingAuth(false);
     } catch (error) {
       dispatch(authAction.setUser(null));
-      console.log("Auth check failed:", error);
       setCheckingAuth(false);
     }
   }
