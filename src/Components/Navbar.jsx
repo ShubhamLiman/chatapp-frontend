@@ -1,15 +1,15 @@
 import React from "react";
 import { SendHorizontal } from "lucide-react";
-import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { tostAction } from "../reduxStatemanagement/tostReducer";
 import { authAction } from "../reduxStatemanagement/authReducer";
-
+import { themeAction } from "../reduxStatemanagement/themeReducer";
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.authReducer);
   async function LogoutUser(e) {
     e.preventDefault();
     try {
@@ -30,26 +30,25 @@ function Navbar() {
     }
   }
 
-  const { user } = useSelector((state) => state.authReducer);
-
   return (
-    <div
-      className="fixed top-0 w-full flex justify-between items-center bg-slate-200 dark:bg-slate-950 p-6 z-50"
-      data-theme="black"
-    >
+    <div className="fixed top-0 w-full flex justify-between items-center p-6 z-50">
       <div className="flex items-center">
-        <span className="dark:text-white text-slate-800 text-xl subpixel-antialiased font-semibold">
+        <span className="text-xl subpixel-antialiased font-semibold">
           ChatterUp
         </span>
         <span>
-          <SendHorizontal
-            className="dark:text-white text-slate-800"
-            strokeWidth={2.5}
-          />
+          <SendHorizontal strokeWidth={2.5} />
         </span>
       </div>
-      <div className="flex items-center gap-8">
-        <div>Settings</div>
+      <div className="flex items-center gap-8 text-xl subpixel-antialiased font-semibold">
+        <div
+          onClick={() => {
+            dispatch(themeAction.switchTheme());
+            console.log("Theme Switched");
+          }}
+        >
+          Settings
+        </div>
         {user && (
           <div onClick={LogoutUser} className="cursor-pointer">
             Logout
