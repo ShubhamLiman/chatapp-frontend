@@ -5,6 +5,7 @@ import Navbar from "./Components/Navbar";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
 import Homepage from "./Pages/HomePage";
+import ProfilePage from "./Pages/ProfilePage";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
@@ -55,6 +56,10 @@ function App() {
         <Route
           path="/signup"
           element={!user ? <SignupPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/profile"
+          element={user ? <ProfilePage /> : <Navigate to="/login" />}
         />
       </Routes>
     </div>
