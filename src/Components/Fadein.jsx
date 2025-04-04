@@ -1,5 +1,3 @@
-"use client";
-
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 
@@ -14,6 +12,8 @@ export default function FadeIn({ children, duration = 0, className }) {
           setTimeout(() => {
             setIsVisible(true);
           }, duration);
+        } else {
+          setIsVisible(false); // Set to false when not intersecting
         }
       },
       {

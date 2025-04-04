@@ -4,14 +4,17 @@ import { useDispatch } from "react-redux";
 import { authAction } from "../reduxStatemanagement/authReducer";
 import { tostAction } from "../reduxStatemanagement/tostReducer";
 import { useNavigate } from "react-router-dom";
+import { connectToSocketIO } from "../lib/socket.js";
 
 import FadeIn from "../Components/Fadein";
 import AnimatedGraphic from "../Components/AnimatedGraphic";
 import LoginForm from "../Components/LoginForm";
+
 function LoginPage() {
   const [loggingIn, setLoggingIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoggingIn(true);
@@ -48,6 +51,7 @@ function LoginPage() {
       const data = response.data;
       if (data.user.success) {
         dispatch(authAction.setUser(data.user.user));
+        connectToSocketIO("http://localhost:3000");
         dispatch(
           tostAction.addToast({ success: true, message: data.user.message })
         );
@@ -61,6 +65,8 @@ function LoginPage() {
       navigate("/");
     } catch (error) {
       setLoggingIn(false);
+      console.log(error);
+
       dispatch(
         tostAction.addToast({
           success: false,
@@ -69,16 +75,6 @@ function LoginPage() {
       );
       console.error("Login failed:", error);
     }
-    // try {
-    //   const response = await axiosInstance.post("/auth/login", {
-    //     email,
-    //     password,
-    //   });
-    //   const data = response.data;
-    //   console.log(data);
-    // } catch (err) {
-    //   console.log(err.response.data.user.message);
-    // }
   };
 
   return (

@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
 import { authAction } from "./reduxStatemanagement/authReducer";
-
+import { connectToSocketIO } from "./lib/socket";
 import CircularIndeterminate from "./Components/Loadinggif";
 
 function App() {
@@ -18,11 +18,13 @@ function App() {
   const { theme } = useSelector((state) => state.themeReducer);
   const dispatch = useDispatch();
   const [checkingAuth, setCheckingAuth] = useState(false);
+
   async function checkAuth() {
     try {
       setCheckingAuth(true);
       const response = await axiosInstance.get("/auth/check");
       dispatch(authAction.setUser(response.data.user.user));
+      connectToSocketIO("http://localhost:3000");
       setCheckingAuth(false);
     } catch (error) {
       dispatch(authAction.setUser(null));
@@ -42,8 +44,8 @@ function App() {
 
   return (
     <div data-theme={theme}>
-      <Toaster containerClassName="mt-20" />
       <Navbar />
+      <Toaster containerClassName="mt-20" />
       <Routes>
         <Route
           path="/"

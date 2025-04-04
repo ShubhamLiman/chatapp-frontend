@@ -37,7 +37,7 @@ const ProfilePage = () => {
       setUpdating(false);
     }
   };
-  const MAX_FILE_SIZE = 2 * 1024 * 1024;
+  const MAX_FILE_SIZE = 9 * 1024 * 1024;
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -76,11 +76,13 @@ const ProfilePage = () => {
 
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
-              <img
-                src={user.profilePic || currentPic || "/avatar.png"}
-                alt="Profile"
-                className="size-32 rounded-full object-cover border-4 "
-              />
+              <div className="size-32 rounded-full border-4">
+                <img
+                  src={user.profilePic || currentPic || "/avatar.png"}
+                  alt="Profile"
+                  className="rounded-full"
+                />
+              </div>
               <label
                 htmlFor="avatar-upload"
                 className={`
